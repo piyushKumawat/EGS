@@ -622,7 +622,7 @@ function renderFlow(){
   mkChart('chartFlow',
     mkDs(v,k=>{
       const m=META[k];
-      const q=S.flowMode==='total'?cvtF(m.q*m.nfrac*2,S.flowUnit):cvtF(m.q,S.flowUnit);
+      const q=S.flowMode==='total'?cvtF(m.q*m.nfrac*1,S.flowUnit):cvtF(m.q,S.flowUnit);
       return TDATA[k].times.map(t=>({x:t/365, y:q}));
     }),
     `${S.flowMode==='total'?'Total (2 producers)':'Per fracture'} flowrate (${lblF(S.flowUnit)})`
@@ -657,7 +657,7 @@ function renderTable(){
     const m=META[String(row.sc)];
     const tr=document.createElement('tr');
     const qf=cvtF(m.q,S.tblFU);
-    const qt=cvtF(m.q*m.nfrac*2,S.tblFU);
+    const qt=cvtF(m.q*m.nfrac*1,S.tblFU);
     tr.innerHTML=`<td><strong>SC${row.sc}</strong></td><td>${m.dist} ft</td><td>${m.angle}°</td><td>${m.spacing} ft</td><td>${fmtF(qf,S.tblFU)}</td><td>${m.nfrac}</td><td>${fmtF(qt,S.tblFU)}</td>`;
     MK.forEach((c,ci)=>{
       const v=row[c];
@@ -682,7 +682,7 @@ function renderBar(){
   const mk=isT?'t'+currentMs:'t'+currentMs; // both use T_TBL for now
   const rows=T_TBL.filter(r=>r[mk]!=null);
   const u=isT?S.cmpTU:S.cmpFU;
-  const cvt=isT?v=>cvtT(v,u):v=>{const m=META[String(T_TBL.find(x=>x['t'+currentMs]===v)?.sc)]; return cvtF((m?.q||1350)*(m?.nfrac||36)*2,u);};
+  const cvt=isT?v=>cvtT(v,u):v=>{const m=META[String(T_TBL.find(x=>x['t'+currentMs]===v)?.sc)]; return cvtF((m?.q||1350)*(m?.nfrac||36)*1,u);};
   const fmt=isT?v=>fmtT(v):v=>fmtF(v,u);
   const lbl=isT?lblT(u):lblF(u);
 
@@ -690,7 +690,7 @@ function renderBar(){
   const vals=rows.map(r=>{
     if(isT) return cvtT(r[mk],u);
     const m=META[String(r.sc)];
-    return cvtF(m.q*m.nfrac*2,u);
+    return cvtF(m.q*m.nfrac*1,u);
   });
 
   if(CHARTS.bar)CHARTS.bar.destroy();
